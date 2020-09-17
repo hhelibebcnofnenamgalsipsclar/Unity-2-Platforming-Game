@@ -6,6 +6,11 @@ using UnityEngine.UI;
 public class playerManager : MonoBehaviour
 {
     // Player specific variables
+    private List<Collectable> inventory = new List<Collectable>();
+    public Text inventoryText;
+    public Text descriptionText;
+
+    private int currentIndex;
     private int health;
     private int score;
 
@@ -46,6 +51,31 @@ public class playerManager : MonoBehaviour
         if (health <= 0)
         {
             LoseGame();
+        }
+        if(inventory.Count == 0)
+        {
+            inventoryText.text ="Current Selection: None";
+            descriptionText.text = "";
+        }
+        else
+        {
+            inventoryText.text = "Current Selection: "+ inventory[currentIndex].collectableName+""+ currentIndex.ToString();
+            descriptionText.text = "Press [E] to" + inventory[currentIndex].description;
+        }
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            inventory[currentIndex].Use();
+            inventory.RemoveAt(currentIndex);
+            currentIndex = (currentIndex -1 ) % inventory.Count;
+
+        }
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            if(inventory.Count>0)
+            {
+                currentIndex = (currentIndex-1) % inventory.Count;
+            }
         }
     }
 
@@ -114,6 +144,16 @@ public class playerManager : MonoBehaviour
     public void ChangeScore(int value)
     {
         score += value;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Collectable>()!=null)
+        {
+            collision.GetComponent<Collectable>().Player = this.gameObject;
+            collision.gameObject.transform.parent = null;
+            inventory.Add(collision.GetComponent<Collectable>());
+            collision.gameObject.SetActive(false);
+        }
     }
 
 }
