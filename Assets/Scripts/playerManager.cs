@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class playerManager : MonoBehaviour
 {
     // Player specific variables
     private List<Collectable> inventory = new List<Collectable>();
-    public Text inventoryText;
-    public Text descriptionText;
+    public TextMeshProUGUI inventoryText;
+    public TextMeshProUGUI descriptionText;
 
     private int currentIndex;
     private int health;
@@ -67,14 +69,14 @@ public class playerManager : MonoBehaviour
         {
             inventory[currentIndex].Use();
             inventory.RemoveAt(currentIndex);
-            currentIndex = (currentIndex -1 ) % inventory.Count;
+            currentIndex = (currentIndex - 1 ) % inventory.Count;
 
         }
         if(Input.GetKeyDown(KeyCode.I))
         {
             if(inventory.Count>0)
             {
-                currentIndex = (currentIndex-1) % inventory.Count;
+                currentIndex = (currentIndex+s1) % inventory.Count;
             }
         }
     }
@@ -149,7 +151,7 @@ public class playerManager : MonoBehaviour
     {
         if (collision.GetComponent<Collectable>()!=null)
         {
-            collision.GetComponent<Collectable>().Player = this.gameObject;
+            collision.GetComponent<Collectable>().player = this.gameObject;
             collision.gameObject.transform.parent = null;
             inventory.Add(collision.GetComponent<Collectable>());
             collision.gameObject.SetActive(false);
