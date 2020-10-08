@@ -22,6 +22,7 @@ public class canvasManager : MonoBehaviour
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         StartCoroutine(FadeEffect(SceneManager.GetActiveScene().buildIndex));
+        GameObject.FindWithTag("Info").GetComponent<Playerinfo>().ResetValues();
     }
 
     public void NextLevel()
